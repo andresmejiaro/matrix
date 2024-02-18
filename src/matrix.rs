@@ -1,5 +1,7 @@
 use std::ops::{Add,Sub,Mul,Div};
 
+use crate::complex::ComplexNumber;
+
 #[derive(PartialEq,Clone)]
 pub struct Matrix<K>
 where 
@@ -113,6 +115,22 @@ where
 }
 
 
+impl Matrix<ComplexNumber> {
+    pub fn adjunct(&self) -> Matrix<K>{
+        let (n,m) = self.size;
+        let mut to_return = Matrix::<ComplexNumber>::
+            new(vec![ComplexNumber::default(); m*n], m ,n);
+        for i in 1..=n{
+            for j in 1..=n{
+                to_return.set(i,j, self.el(j,i).conj());
+            }
+        }
+        to_return
+    }
+
+    
+}
+
 pub struct Vector<K>
 where 
     K: Add<Output = K> + Sub<Output = K> + Mul<Output = K> 
@@ -187,5 +205,18 @@ where
 impl Vector<f32>{
     fn lerp(u: Vector<f32>, v: Vector<f32>, t: f32)-> Vector<f32>{
         Vector::<f32>::linear_combination(&[u,v],&[1.0-t,t] )
+    }
+}
+
+impl Vector<f64>{
+    fn lerp(u: Vector<f64>, v: Vector<f64>, t: f64)-> Vector<f64>{
+        Vector::<f64>::linear_combination(&[u,v],&[1.0-t,t] )
+    }
+}
+
+impl Vector<ComplexNumber>{
+    fn lerp(u: Vector<ComplexNumber>, v: Vector<ComplexNumber>, t: ComplexNumber)-> Vector<ComplexNumber>{
+        Vector::<ComplexNumber>::linear_combination(&[u,v],
+            &[ComplexNumber::Cartesian { re: (1.0), im: (0.0) } - t, t] )
     }
 }
