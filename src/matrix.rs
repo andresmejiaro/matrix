@@ -254,7 +254,7 @@ where
         'col_loop: for pivot_col in 1..=m {
             // Check if the candidate for pivot is not cero if not exchange it with other col
             println!("i {pivot_row} j {pivot_col}");
-			if self.el(pivot_row, pivot_col) == K::default() {
+            if self.el(pivot_row, pivot_col) == K::default() {
                 for i in pivot_row..=n {
                     if self.el(i, pivot_col) != K::default() {
                         if inv {
@@ -295,12 +295,12 @@ where
                     );
                 }
             }
-            if pivot_row < n{
-				pivot_row += 1;}
-			else{
-				pivot_row = 1;
-				continue;
-			}
+            if pivot_row < n {
+                pivot_row += 1;
+            } else {
+                pivot_row = 1;
+                continue;
+            }
         }
         (det, pivot_row, inv_m)
     }

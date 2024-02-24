@@ -512,31 +512,45 @@ pub fn ex09_test() {
 }
 
 pub fn ex10_test() {
-    let u = Matrix::new(vec![1., 0., 0.,0., 1., 0.,0., 0., 1.],3,3);
+    let u = Matrix::new(vec![1., 0., 0., 0., 1., 0., 0., 0., 1.], 3, 3);
     println!("{}", u.row_echelon());
-    println!(" 	// [1.0, 0.0, 0.0]
+    println!(
+        " 	// [1.0, 0.0, 0.0]
      	// [0.0, 1.0, 0.0]
-     	// [0.0, 0.0, 1.0]");
-    let u = Matrix::new(vec![1., 2.,3., 4.],2,2);
+     	// [0.0, 0.0, 1.0]"
+    );
+    let u = Matrix::new(vec![1., 2., 3., 4.], 2, 2);
     println!("{}", u.row_echelon());
-    println!("	// [1.0, 0.0]
-    	// [0.0, 1.0]");
-    let u = Matrix::new(vec![1., 2.,2., 4.],2,2);
+    println!(
+        "	// [1.0, 0.0]
+    	// [0.0, 1.0]"
+    );
+    let u = Matrix::new(vec![1., 2., 2., 4.], 2, 2);
     println!("{}", u.row_echelon());
-    println!("	// [1.0, 2.0]
-	// [0.0, 0.0]");
-    let u = Matrix::new(vec![8.,4.,8.,5.,2.5,5.,-2.,20.,1.,4.,4.,4.,28.,-4.,17.],3,5);
+    println!(
+        "	// [1.0, 2.0]
+	// [0.0, 0.0]"
+    );
+    let u = Matrix::new(
+        vec![
+            8., 4., 8., 5., 2.5, 5., -2., 20., 1., 4., 4., 4., 28., -4., 17.,
+        ],
+        3,
+        5,
+    );
     println!("{}", u.row_echelon());
-    println!("	// [1.0, 0.625, 0.0, 0.0, -12.1666667]
+    println!(
+        "	// [1.0, 0.625, 0.0, 0.0, -12.1666667]
     	// [0.0, 0.0, 1.0, 0.0, -3.6666667]
-    	// [0.0, 0.0, 0.0, 1.0, 29.5 ]");
+    	// [0.0, 0.0, 0.0, 1.0, 29.5 ]"
+    );
 }
 
 pub fn ex11_test() {
-    let u = Matrix::new(vec![ 1., -1.,-1., 1.],2,2);
+    let u = Matrix::new(vec![1., -1., -1., 1.], 2, 2);
     println!("{}", u.determinant());
     println!("// 0.0");
-    let u = Matrix::new(vec![2., 0., 0.,0., 2., 0.,0., 0., 2.],3,3);
+    let u = Matrix::new(vec![2., 0., 0., 0., 2., 0., 0., 0., 2.], 3, 3);
     println!("{}", u.determinant());
     println!("// 8.0");
     // 	let u = Matrix::from([
