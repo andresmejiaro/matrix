@@ -1,31 +1,44 @@
 mod complex;
 mod matrix;
+mod tests;
+mod traits;
+mod vector;
 
-use crate::complex::ComplexNumber;
-use crate::matrix::Matrix;
+use std::io;
+use tests::*;
 
 fn main() {
-    {
-    //Complex number test
-    let x = ComplexNumber::Cartesian {re: 1.0, im: -1.0};
-    println!("{} {}",x.clone()*x.conj(), x.clone()*x.inv());
-    }
-    {
-        let m1 = Matrix::<f64>::new(vec![1.0,2.0,3.0,4.0],2,2);
-        for i in 1..=2{
-            for j in 1..=2{
-                println!("{} {} {}", i, j, m1.el(i,j));
+    let examples = vec![
+        ex00_test, ex01_test, ex02_test, ex03_test, ex04_test, ex05_test, ex06_test
+    ];
+    loop {
+        println!("Enter a number of exercise to run the test for that part of the subject");
+        println!("Leave empty to exit!");
+        let mut input_string = String::new();
+        match io::stdin().read_line(&mut input_string) {
+            Ok(_) => {}
+            Err(_e) => {
+                println!("Error reading line...");
+                continue;
             }
         }
-        let (n,m) = m1.size();
-        println!("{} {}", m, n);
-
-        let m2 = Matrix::<f64>::new(vec![5.0,0.0,8.0,0.0],2,2);
-        let m3 = m1.mlt(m2);
-        for i in 1..=2{
-            for j in 1..=2{
-                println!("{} {} {}", i, j, m3.el(i,j));
-            }
+        let trimmed = input_string.trim();
+        if trimmed.is_empty() {
+            println!("Bye!");
+            break;
         }
+        let n = match usize::from_str_radix(trimmed, 10) {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input. Please enter a valid number");
+                continue;
+            }
+        };
+        big_line();
+        if n >= examples.len() {
+            println!("out of bounds try again");
+            continue;
+        }
+        examples[n]();
     }
 }
