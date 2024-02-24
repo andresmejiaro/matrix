@@ -16,7 +16,8 @@ where
         + Tf64
         + Norm
         + Neg
-        + Conj,
+        + Conj
+        + std::fmt::Display,
 {
     size: usize,
     matrix: Matrix<K>,
@@ -35,7 +36,8 @@ where
         + Norm
         + One
         + Neg
-        + Conj,
+        + Conj
+        + std::fmt::Display,
 {
     pub fn new(elements: Vec<K>) -> Vector<K> {
         assert!(elements.len() > 0, "Input is empty");
@@ -49,6 +51,10 @@ where
 
     pub fn size(&self) -> usize {
         self.size
+    }
+
+    pub fn matrix(&self) -> &Matrix<K> {
+        &self.matrix
     }
 
     pub fn el(&self, i: usize) -> K {
@@ -177,5 +183,3 @@ where
         write!(f, "]")
     }
 }
-
-

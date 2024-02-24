@@ -1,7 +1,13 @@
 use core::fmt;
-use std::ops::{Add, Div, Mul, Sub};
+use std::{
+    ops::{Add, Div, Mul, Neg, Sub},
+    result,
+};
 
-use crate::traits::{Conj, Norm, One, Tf64};
+use crate::{
+    traits::{Conj, Norm, One, Tf64},
+    vector::Vector,
+};
 
 #[derive(PartialEq, Clone)]
 pub struct Matrix<K>
@@ -16,7 +22,8 @@ where
         + One
         + Tf64
         + Norm
-        + Conj,
+        + Conj
+        + Neg,
 {
     size: (usize, usize),
     pub elements: Vec<K>,
@@ -34,7 +41,9 @@ where
         + One
         + Tf64
         + Norm
-        + Conj,
+        + Conj
+        + Neg
+        + std::fmt::Display,
 {
     pub fn new(elements: Vec<K>, n: usize, m: usize) -> Matrix<K> {
         assert!(
@@ -152,12 +161,22 @@ where
         for i in 0..n {
             for j in 0..m {
                 for w in 0..p1 {
-                    newv[j + i * n] = newv[j + i * n]
+                    //println!("i {i} j {j} w {w} m {m} n {n}");
+                    newv[j * n + i] = newv[j * n + i]
                         + self.el(i + 1, w + 1) * other.el(w + 1, j + 1);
                 }
             }
         }
         Matrix::<K>::new(newv, n, m)
+    }
+
+    pub fn mul_vec(&self, other: &Vector<K>) -> Vector<K> {
+        let result = self.mlt(other.matrix());
+        Vector::<K>::new(result.elements)
+    }
+
+    pub fn mul_mat(&self, other: &Matrix<K>) -> Matrix<K> {
+        self.mlt(other)
     }
 
     pub fn linear_combination(u: &[&Matrix<K>], coefs: &[K]) -> Matrix<K> {
@@ -234,7 +253,8 @@ where
 
         'col_loop: for pivot_col in 1..=m {
             // Check if the candidate for pivot is not cero if not exchange it with other col
-            if self.el(pivot_row, pivot_col) == K::default() {
+            println!("i {pivot_row} j {pivot_col}");
+			if self.el(pivot_row, pivot_col) == K::default() {
                 for i in pivot_row..=n {
                     if self.el(i, pivot_col) != K::default() {
                         if inv {
@@ -275,7 +295,12 @@ where
                     );
                 }
             }
-            pivot_row += 1;
+            if pivot_row < n{
+				pivot_row += 1;}
+			else{
+				pivot_row = 1;
+				continue;
+			}
         }
         (det, pivot_row, inv_m)
     }
@@ -354,7 +379,8 @@ where
         + One
         + Tf64
         + Norm
-        + Conj,
+        + Conj
+        + Neg,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (m, n) = self.size();

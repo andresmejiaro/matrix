@@ -427,27 +427,191 @@ pub fn ex05_test() {
     println!("// 0.974631846");
 }
 
-pub fn ex06_test(){
+pub fn ex06_test() {
     let u = Vector::new(vec![0., 0., 1.]);
-let v = Vector::new(vec![1., 0., 0.]);
-println!("{}", Vector::cross_product(&u, &v));
-println!("// [0.]");
-println!("// [1.]");
-println!("// [0.]");
-let u = Vector::new(vec![1., 2., 3.]);
-let v = Vector::new(vec![4., 5., 6.]);
-println!("{}", Vector::cross_product(&u, &v));
-println!("// [-3.]");
-println!("// [6.]");
-println!("// [-3.]");
-let u = Vector::new(vec![4., 2., -3.]);
-let v = Vector::new(vec![-2., -5., 16.]);
-println!("{}", Vector::cross_product(&u, &v));
-println!("// [17.]");
-println!("// [-58.]");
-println!("// [-16.]");
+    let v = Vector::new(vec![1., 0., 0.]);
+    println!("{}", Vector::cross_product(&u, &v));
+    println!("// [0.]");
+    println!("// [1.]");
+    println!("// [0.]");
+    let u = Vector::new(vec![1., 2., 3.]);
+    let v = Vector::new(vec![4., 5., 6.]);
+    println!("{}", Vector::cross_product(&u, &v));
+    println!("// [-3.]");
+    println!("// [6.]");
+    println!("// [-3.]");
+    let u = Vector::new(vec![4., 2., -3.]);
+    let v = Vector::new(vec![-2., -5., 16.]);
+    println!("{}", Vector::cross_product(&u, &v));
+    println!("// [17.]");
+    println!("// [-58.]");
+    println!("// [-16.]");
 }
 
-pub fn ex07_test(){
-    
+pub fn ex07_test() {
+    let u = Matrix::new(vec![1., 0., 0., 1.], 2, 2);
+    let v = Vector::new(vec![4., 2.]);
+    println!("{}", u.mul_vec(&v));
+    println!("// [4.]");
+    println!("// [2.]");
+    let u = Matrix::new(vec![2., 0., 0., 2.], 2, 2);
+    let v = Vector::new(vec![4., 2.]);
+    println!("{}", u.mul_vec(&v));
+    println!("// [8.]");
+    println!("// [4.]");
+    let u = Matrix::new(vec![2., -2., -2., 2.], 2, 2);
+    let v = Vector::new(vec![4., 2.]);
+    println!("{}", u.mul_vec(&v));
+    println!("// [4.]");
+    println!("// [-4.]");
+    let u = Matrix::new(vec![1., 0., 0., 1.], 2, 2);
+    let v = Matrix::new(vec![1., 0., 0., 1.], 2, 2);
+    println!("{}", u.mul_mat(&v));
+    println!("// [1.,0.]");
+    println!("// [0.,1.]");
+    let u = Matrix::new(vec![1., 0., 0., 1.], 2, 2);
+    let v = Matrix::new(vec![2., 4., 1., 2.], 2, 2);
+    println!("{}", u.mul_mat(&v));
+    println!("// [2.,1.]");
+    println!("// [4.,2.]");
+    let u = Matrix::new(vec![3., 6., -5., 8.], 2, 2);
+    let v = Matrix::new(vec![2., 4., 1., 2.], 2, 2);
+    println!("{}", u.mul_mat(&v));
+    println!("// [-14.,7.]");
+    println!("// [44.,22.]");
 }
+
+pub fn ex08_test() {
+    let u = Matrix::new(vec![1., 0., 0., 1.], 2, 2);
+    println!("{}", u.trace());
+    println!("2.0");
+    let u = Matrix::new(vec![2., 4., -2., -5., 3., 3., 0., 7., 4.], 3, 3);
+    println!("{}", u.trace());
+    println!("9.0");
+    let u = Matrix::new(vec![-2., 1., 0., -8., -23., 6., 4., 4., 4.], 3, 3);
+    println!("{}", u.trace());
+    println!("-21.0");
+}
+
+pub fn ex09_test() {
+    let m1 = Matrix::<ComplexNumber>::new(
+        vec![
+            ComplexNumber::n(1.0, 0.),
+            ComplexNumber::n(0., 1.0),
+            ComplexNumber::n(-1., 1.),
+            ComplexNumber::n(2., -1.),
+            ComplexNumber::n(-2., 2.),
+            ComplexNumber::n(-2., 0.),
+        ],
+        3,
+        2,
+    );
+    println!("A complex matrix {}", m1);
+    println!("Its transpose matrix {}", m1.tr());
+    println!("Its adjunct matrix {}", m1.adj());
+}
+
+pub fn ex10_test() {
+    let u = Matrix::new(vec![1., 0., 0.,0., 1., 0.,0., 0., 1.],3,3);
+    println!("{}", u.row_echelon());
+    println!(" 	// [1.0, 0.0, 0.0]
+     	// [0.0, 1.0, 0.0]
+     	// [0.0, 0.0, 1.0]");
+    let u = Matrix::new(vec![1., 2.,3., 4.],2,2);
+    println!("{}", u.row_echelon());
+    println!("	// [1.0, 0.0]
+    	// [0.0, 1.0]");
+    let u = Matrix::new(vec![1., 2.,2., 4.],2,2);
+    println!("{}", u.row_echelon());
+    println!("	// [1.0, 2.0]
+	// [0.0, 0.0]");
+    let u = Matrix::new(vec![8.,4.,8.,5.,2.5,5.,-2.,20.,1.,4.,4.,4.,28.,-4.,17.],3,5);
+    println!("{}", u.row_echelon());
+    println!("	// [1.0, 0.625, 0.0, 0.0, -12.1666667]
+    	// [0.0, 0.0, 1.0, 0.0, -3.6666667]
+    	// [0.0, 0.0, 0.0, 1.0, 29.5 ]");
+}
+
+pub fn ex11_test() {
+    let u = Matrix::new(vec![ 1., -1.,-1., 1.],2,2);
+    println!("{}", u.determinant());
+    println!("// 0.0");
+    let u = Matrix::new(vec![2., 0., 0.,0., 2., 0.,0., 0., 2.],3,3);
+    println!("{}", u.determinant());
+    println!("// 8.0");
+    // 	let u = Matrix::from([
+    // 	[8., 5., -2.],
+    // 	[4., 7., 20.],
+    // 	[7., 6., 1.],
+    // 	]);
+    // 	println!("{}", u.determinant());
+    // 	// -174.0
+    // 	let u = Matrix::from([
+    // 	[ 8., 5., -2., 4.],
+    // 	[ 4., 2.5, 20., 4.],
+    // 	[ 8., 5., 1., 4.],
+    // 	[28., -4., 17., 1.],
+    // 	]);
+    // 	println!("{}", u.determinant());
+    // 	// 1032
+    // 	XVI.1
+}
+
+pub fn ex12_test() {
+    // let u = Matrix::from([
+    // 	[1., 0., 0.],
+    // 	[0., 1., 0.],
+    // 	[0., 0., 1.],
+    // 	]);
+    // 	println!("{}", u.inverse());
+    // 	// [1.0, 0.0, 0.0]
+    // 	// [0.0, 1.0, 0.0]
+    // 	// [0.0, 0.0, 1.0]
+    // 	let u = Matrix::from([
+    // 	[2., 0., 0.],
+    // 	[0., 2., 0.],
+    // 	[0., 0., 2.],
+    // 	]);
+    // 	println!("{}", u.inverse());
+    // 	// [0.5, 0.0, 0.0]
+    // 	// [0.0, 0.5, 0.0]
+    // 	// [0.0, 0.0, 0.5]
+    // 	let u = Matrix::from([
+    // 	[8., 5., -2.],
+    // 	[4., 7., 20.],
+    // 	[7., 6., 1.],
+    // 	]);
+    // 	println!("{}", u.inverse());
+    // 	// [0.649425287, 0.097701149, -0.655172414]
+    // 	// [-0.781609195, -0.126436782, 0.965517241]
+    // 	// [0.143678161, 0.074712644, -0.206896552]
+}
+
+pub fn ex13_test() {
+    // let u = Matrix::from([
+    // 	[1., 0., 0.],
+    // 	[0., 1., 0.],
+    // 	[0., 0., 1.],
+    // 	]);
+    // 	println!("{}", u.rank());
+    // 	// 3
+    // 	let u = Matrix::from([
+    // 	[ 1., 2., 0., 0.],
+    // 	[ 2., 4., 0., 0.],
+    // 	[-1., 2., 1., 1.],
+    // 	]);
+    // 	println!("{}", u.rank());
+    // 	// 2
+    // 	let u = Matrix::from([
+    // 	[ 8., 5., -2.],
+    // 	[ 4., 7., 20.],
+    // 	[ 7., 6., 1.],
+    // 	[21., 18., 7.],
+    // 	]);
+    // 	println!("{}", u.rank());
+    // 	// 3
+}
+
+pub fn ex14_test() {}
+
+pub fn ex15_test() {}

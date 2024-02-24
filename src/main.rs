@@ -9,7 +9,9 @@ use tests::*;
 
 fn main() {
     let examples = vec![
-        ex00_test, ex01_test, ex02_test, ex03_test, ex04_test, ex05_test, ex06_test
+        ex00_test, ex01_test, ex02_test, ex03_test, ex04_test, ex05_test,
+        ex06_test, ex07_test, ex08_test, ex09_test, ex10_test, ex11_test,
+        ex12_test, ex13_test, ex14_test, ex15_test,
     ];
     loop {
         println!("Enter a number of exercise to run the test for that part of the subject");
