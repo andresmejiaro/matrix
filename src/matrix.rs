@@ -241,7 +241,8 @@ where
     fn gauss_red_det_rank(&mut self, inv: bool) -> (K, usize, Matrix<K>) {
         let (n, m) = self.size();
         let mut det = K::one();
-        let mut pivot_row = 1;
+        let mut pivot_row = 0;
+        let mut pivot_col = 0;
 
         let mut inv_m;
 
@@ -251,57 +252,52 @@ where
             inv_m = Matrix::<K>::identity(1);
         }
 
-        'col_loop: for pivot_col in 1..=m {
-            // Check if the candidate for pivot is not cero if not exchange it with other col
-            println!("i {pivot_row} j {pivot_col}");
-            if self.el(pivot_row, pivot_col) == K::default() {
-                for i in pivot_row..=n {
-                    if self.el(i, pivot_col) != K::default() {
-                        if inv {
-                            _ = inv_m.row_swapping(pivot_row, i)
-                        }
-                        det = det * self.row_swapping(pivot_row, i);
-                        break;
-                    }
-                    if i == n {
-                        continue 'col_loop;
-                    }
-                }
+        // in each column
+        'outer: for col in 1..=m {
+            if pivot_row >= n{
+                break;
             }
-            if inv {
-                _ = inv_m.row_scaling(
-                    pivot_row,
-                    K::one() / self.el(pivot_row, pivot_col),
-                );
-            }
-            det = det
-                * self.row_scaling(
-                    pivot_row,
-                    K::one() / self.el(pivot_row, pivot_col),
-                );
-            for i in 1..=n {
-                if i != pivot_row {
-                    if inv {
-                        inv_m.row_static_add(
-                            i,
-                            pivot_row,
-                            K::default() - self.el(i, pivot_col),
-                        );
-                    }
-                    self.row_static_add(
-                        i,
-                        pivot_row,
-                        K::default() - self.el(i, pivot_col),
-                    );
-                }
-            }
-            if pivot_row < n {
+            //mare sure thar there is a pivot
+            if self.el(pivot_row + 1, col) != K::default() {
                 pivot_row += 1;
+                pivot_col = col;
             } else {
-                pivot_row = 1;
-                continue;
+                // look for a new pivot
+                for row in (pivot_row + 1)..=n {
+                    if self.el(row, col) != K::default() {
+                        det = det * self.row_swapping(row, pivot_row + 1);
+                        if inv {
+                            _ = inv_m.row_swapping(row, pivot_row + 1);
+                        }
+                        pivot_row += 1;
+                        pivot_col = col;
+                    }
+                    if row == n {
+                        // no pivot found
+                        det = K::default();
+                        if inv {
+                            break;
+                        } else {
+                            continue 'outer;
+                        }
+                    }
+                }
+            }
+            // Normalize the new pivot and reduce the column.
+            det = det * self.row_scaling( pivot_row,K::one() / self.el(pivot_row, pivot_col));
+            // Reduce all other rows
+            for row in 1..=n{
+                if row != pivot_row{
+                    det = det * self.row_static_add(row, pivot_row,
+                    K::default() - self.el(row, col) );
+                    if inv {
+                        _ =  inv_m.row_static_add(row, pivot_row,
+                            self.el(row, col) );
+                    }
+                }
             }
         }
+
         (det, pivot_row, inv_m)
     }
 
