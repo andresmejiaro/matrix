@@ -57,6 +57,8 @@ where
         }
     }
 
+    
+
     pub fn size(&self) -> (usize, usize) {
         self.size
     }
@@ -254,7 +256,7 @@ where
 
         // in each column
         'outer: for col in 1..=m {
-            if pivot_row >= n{
+            if pivot_row >= n {
                 break;
             }
             //mare sure thar there is a pivot
@@ -265,12 +267,13 @@ where
                 // look for a new pivot
                 for row in (pivot_row + 1)..=n {
                     if self.el(row, col) != K::default() {
-                        det = det * self.row_swapping(row, pivot_row + 1);
                         if inv {
                             _ = inv_m.row_swapping(row, pivot_row + 1);
                         }
+                        det = det * self.row_swapping(row, pivot_row + 1);
                         pivot_row += 1;
                         pivot_col = col;
+                        break;
                     }
                     if row == n {
                         // no pivot found
@@ -284,16 +287,34 @@ where
                 }
             }
             // Normalize the new pivot and reduce the column.
-            det = det * self.row_scaling( pivot_row,K::one() / self.el(pivot_row, pivot_col));
+            let scaling = K::one() / self.el(pivot_row, pivot_col);
+            if inv{
+                _ = inv_m.row_scaling(
+                    pivot_row,
+                    scaling,
+                );
+            }
+            det = det
+                * self.row_scaling(
+                    pivot_row,
+                    scaling,
+                );
             // Reduce all other rows
-            for row in 1..=n{
-                if row != pivot_row{
-                    det = det * self.row_static_add(row, pivot_row,
-                    K::default() - self.el(row, col) );
+            for row in 1..=n {
+                if row != pivot_row {
                     if inv {
-                        _ =  inv_m.row_static_add(row, pivot_row,
-                            self.el(row, col) );
+                        _ = inv_m.row_static_add(
+                            row,
+                            pivot_row,
+                            self.el(row, col),
+                        );
                     }
+                    det = det
+                        * self.row_static_add(
+                            row,
+                            pivot_row,
+                            K::default() - self.el(row, col),
+                        );
                 }
             }
         }
@@ -308,6 +329,8 @@ where
     }
 
     pub fn determinant(&self) -> K {
+        let (m, n) = self.size();
+        assert!(m == n, "Not a square matrix. Can't calculate determinant.");
         let mut to_return = self.clone();
         let (det, _, _) = to_return.gauss_red_det_rank(false);
         det
@@ -333,17 +356,14 @@ where
         Matrix::<K>::diag(vec![K::one(); n])
     }
 
-    pub fn inverse(&self) -> Result<Matrix<K>, &str> {
-        let (n, m) = self.size();
-        if n != m {
-            return Err("Matrix is not squared");
-        }
+    pub fn inverse(&self) -> Matrix<K> {
+        let (m, n) = self.size();
+        assert!(m == n, "Not a square matrix. Can't calculate inverse.");
         let mut to_alg = self.clone();
         let (_, rank, inv) = to_alg.gauss_red_det_rank(true);
-        if rank != n {
-            return Err("Matrix is not invertible");
-        }
-        Ok(inv)
+        assert!(rank == n, "Matrix is not invertible");
+
+        inv
     }
     pub fn projection(
         fov: f64,
