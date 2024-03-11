@@ -74,3 +74,36 @@ impl Conj for f32 {
         *self
     }
 }
+
+
+// trait for all kield
+
+use::core::ops::{Neg, Div, Sub, Mul, Add};
+
+use crate::complex::ComplexNumber;
+
+pub trait Field: Add<Output = Self>
++ Sub<Output = Self>
++ Mul<Output = Self>
++ Div<Output = Self>
++ PartialEq
++ Copy
++ Default
++ One
++ Tf64
++ Norm
++ Conj
++ Neg
++ std::fmt::Display {
+
+}
+
+impl Field for f64 {
+
+}
+impl Field for f32 {
+
+}
+impl Field for ComplexNumber {
+
+}

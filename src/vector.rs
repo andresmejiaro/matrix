@@ -1,23 +1,10 @@
 use crate::matrix::Matrix;
-use crate::traits::{Conj, Norm, One, Tf64};
+use crate::traits::{Field, Tf64};
 use core::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
 
 pub struct Vector<K>
 where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + One
-        + Tf64
-        + Norm
-        + Neg
-        + Conj
-        + std::fmt::Display,
+    K: Field,
 {
     size: usize,
     matrix: Matrix<K>,
@@ -25,19 +12,7 @@ where
 
 impl<K> Vector<K>
 where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + Tf64
-        + Norm
-        + One
-        + Neg
-        + Conj
-        + std::fmt::Display,
+    K:Field,
 {
     pub fn new(elements: Vec<K>) -> Vector<K> {
         assert!(elements.len() > 0, "Input is empty");
@@ -157,19 +132,7 @@ where
 
 impl<K> fmt::Display for Vector<K>
 where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + fmt::Display
-        + One
-        + Tf64
-        + Norm
-        + Neg
-        + Conj,
+    K: Field
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let n = self.size();

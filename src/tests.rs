@@ -1,6 +1,6 @@
 use crate::complex::ComplexNumber;
 use crate::matrix::Matrix;
-use crate::traits::Conj;
+use crate::traits::{Conj, Field};
 use crate::vector::Vector;
 
 fn old_test() {

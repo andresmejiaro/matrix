@@ -5,45 +5,21 @@ use std::{
 };
 
 use crate::{
-    traits::{Conj, Norm, One, Tf64},
+    traits::Field,
     vector::Vector,
 };
 
 #[derive(PartialEq, Clone)]
 pub struct Matrix<K>
 where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + One
-        + Tf64
-        + Norm
-        + Conj
-        + Neg,
+    K: Field
 {
     size: (usize, usize),
     pub elements: Vec<K>,
 }
 
 impl<K> Matrix<K>
-where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + One
-        + Tf64
-        + Norm
-        + Conj
-        + Neg
-        + std::fmt::Display,
+where K: Field
 {
     pub fn new(elements: Vec<K>, n: usize, m: usize) -> Matrix<K> {
         assert!(
@@ -306,7 +282,7 @@ where
                         _ = inv_m.row_static_add(
                             row,
                             pivot_row,
-                            self.el(row, col),
+                            K::default() - self.el(row, col),
                         );
                     }
                     det = det
@@ -384,19 +360,7 @@ where
 
 impl<K> fmt::Display for Matrix<K>
 where
-    K: Add<Output = K>
-        + Sub<Output = K>
-        + Mul<Output = K>
-        + Div<Output = K>
-        + PartialEq
-        + Copy
-        + Default
-        + fmt::Display
-        + One
-        + Tf64
-        + Norm
-        + Conj
-        + Neg,
+    K: Field
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (m, n) = self.size();
