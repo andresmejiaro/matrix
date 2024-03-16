@@ -1,6 +1,7 @@
+// Import Error trait and formatting utilities from the standard library
 use std::error::Error;
 use std::fmt::{self};
-
+// Define a public enum `LinAlgError` for linear algebra errors with detailed cases
 #[derive(Debug)]
 pub enum LinAlgError {
     OperationNonConforming {
@@ -22,6 +23,7 @@ pub enum LinAlgError {
     EmptyArgs,
 }
 
+// Implement the Display trait for `LinAlgError` to enable custom error messages
 impl fmt::Display for LinAlgError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -49,4 +51,5 @@ impl fmt::Display for LinAlgError {
     }
 }
 
+// Implement the Error trait for `LinAlgError` to integrate with error handling
 impl Error for LinAlgError {}
